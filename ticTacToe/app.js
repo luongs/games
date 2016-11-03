@@ -51,14 +51,14 @@ function drawBoard() {
 
     function drawX(x, y) {
         context.beginPath();
-        context.moveTo(x, y);
-        context.lineTo(x-50, y-50);
+        context.moveTo(x-10, y-10);
+        context.lineTo(x-40, y-40);
         context.closePath();
         context.stroke();
 
         context.beginPath();
-        context.moveTo(x, y-50);
-        context.lineTo(x-50, y);
+        context.moveTo(x-10, y-40);
+        context.lineTo(x-40, y-10);
         context.closePath();
         context.stroke();
     }
