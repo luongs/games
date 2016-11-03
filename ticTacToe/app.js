@@ -24,12 +24,9 @@ function drawBoard() {
         let mouseY = e.pageY - this.offsetTop;
         let x = isGreaterThan(maxBounds, mouseX);
         let y = isGreaterThan(maxBounds, mouseY);
-        console.log("X coord: "+mouseX);
-        console.log("Y coord: "+mouseY);
-        console.log("X quadrant: "+x);
-        console.log("Y coord: "+y);
+        drawShape(x, y);
         //drawX(x, y);
-        drawCircle(x, y);
+        //drawCircle(x, y);
     };
 
     canvas.addEventListener("mousedown", onmousedown);
@@ -41,6 +38,18 @@ function drawBoard() {
             }
         }
         return 0;
+    }
+
+    let isCircle = true;
+    function drawShape(x, y){
+        if (isCircle){
+            drawCircle(x, y);
+            isCircle = false;
+        }
+        else{
+            drawX(x, y);
+            isCircle = true;
+        }
     }
 
     function drawCircle(x, y) {
