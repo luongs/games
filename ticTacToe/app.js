@@ -28,8 +28,8 @@ function drawBoard() {
         console.log("Y coord: "+mouseY);
         console.log("X quadrant: "+x);
         console.log("Y coord: "+y);
-        drawX(x, y);
-        //drawCircle(x, y);
+        //drawX(x, y);
+        drawCircle(x, y);
     };
 
     canvas.addEventListener("mousedown", onmousedown);
@@ -44,12 +44,14 @@ function drawBoard() {
     }
 
     function drawCircle(x, y) {
+        context.lineWidth = 2;
         context.beginPath();
         context.arc(x-25, y-25, 20, 0, 2*Math.PI);
         context.stroke();
     }
 
     function drawX(x, y) {
+        context.lineWidth = 2;
         context.beginPath();
         context.moveTo(x-10, y-10);
         context.lineTo(x-40, y-40);
