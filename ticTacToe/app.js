@@ -8,6 +8,8 @@ function drawBoard() {
     const N = 3;
 
     let maxBounds = [];
+    let gameArr = [];
+    let index = 0;
     for (let i=0; i<N; i++ ){
         let y = i+1;
         maxBounds[i] = 50*(y+1);
@@ -15,9 +17,13 @@ function drawBoard() {
         for (let j=0; j<N; j++){
             let x = j+1;
 
+            let coordArr = [(50*(x+1)), (50*(y+1))];
+            gameArr[index++] = coordArr;
+
             context.strokeRect(50*x, 50*y, 50, 50);
         }
     }
+    console.log(gameArr);
 
     let onmousedown = function(e){
         let mouseX = e.pageX - this.offsetLeft;
