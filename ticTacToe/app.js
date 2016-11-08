@@ -5,17 +5,17 @@
 function drawBoard() {
     const canvas = document.getElementById('canvas');
     const context = document.getElementById('canvas').getContext('2d');
+    const N = 3;
 
     let maxBounds = [];
-    for (let i=0; i<3; i++ ){
-        let spaceY = i+1;
-        let maxBound = i+2;
-        maxBounds[i] = 50*(maxBound);
+    for (let i=0; i<N; i++ ){
+        let y = i+1;
+        maxBounds[i] = 50*(y+1);
 
-        for (let j=0; j<3; j++){
-            let spaceX = j+1;
+        for (let j=0; j<N; j++){
+            let x = j+1;
 
-            context.strokeRect(50*spaceX, 50*spaceY, 50, 50);
+            context.strokeRect(50*x, 50*y, 50, 50);
         }
     }
 
@@ -25,8 +25,6 @@ function drawBoard() {
         let x = isGreaterThan(maxBounds, mouseX);
         let y = isGreaterThan(maxBounds, mouseY);
         drawShape(x, y);
-        //drawX(x, y);
-        //drawCircle(x, y);
     };
 
     canvas.addEventListener("mousedown", onmousedown);
