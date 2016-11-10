@@ -32,7 +32,7 @@ function drawBoard() {
 
 
     let isCircle = true;
-    let CIRCLE = 1;
+    let O = 1;
     let X = -1;
 
     // Majority of game logic
@@ -47,7 +47,7 @@ function drawBoard() {
 
             if (isCircle){
                 drawCircle(x, y);
-                freeSpaceArr[index] = CIRCLE;
+                freeSpaceArr[index] = O;
                 isCircle = false;
             }
             else {
@@ -55,7 +55,13 @@ function drawBoard() {
                 freeSpaceArr[index] = X;
                 isCircle = true;
             }
+
+            let winner = checkWinner(freeSpaceArr);
+            if (winner == 3 || winner == -3){
+                console.log("We have a winner!");
+            }
         }
+        console.log(freeSpaceArr);
     };
 
     canvas.addEventListener("mousedown", onmousedown);
@@ -119,5 +125,34 @@ function drawBoard() {
         context.lineTo(x-40, y-10);
         context.closePath();
         context.stroke();
+    }
+
+    let X_WIN = 3;
+    let O_WIN = -3;
+    function checkWinner(freeSpaceArr) {
+
+        let total = 0;
+        let index = 0;
+
+        // Check horizontal
+        for (let i=0; i<freeSpaceArr.length; i++){
+            if (total == X_WIN || total == O_WIN){
+                return total;
+            }
+
+            if (index == N){
+                index = 0;
+                total = 0;
+            }
+            else {
+                total += freeSpaceArr[index];
+                index++;
+            }
+        }
+
+        // TODO: check vertical
+
+        return -1;
+
     }
 }
