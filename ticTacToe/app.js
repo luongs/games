@@ -24,20 +24,37 @@ function drawBoard() {
     }
 
     // Create empty filled array
+    let FREE = 0;
     let freeSpaceArr = [];
     for (let i=0; i<gameArr.length; i++){
-        freeSpaceArr[i] = true;
+        freeSpaceArr[i] = FREE;
     }
 
+
+    let isCircle = true;
+    let CIRCLE = 1;
+    let X = -1;
+
+    // Majority of game logic
     let onmousedown = function(e){
         let mouseX = e.pageX - this.offsetLeft;
         let mouseY = e.pageY - this.offsetTop;
         let x = getXCoordInQuadrant(gameArr, mouseX, N);
         let y = getYCoordInQuadrant(gameArr, mouseY, N);
-        let freeIndex = getFreeIndex(x, y, gameArr, freeSpaceArr);
-        if (freeSpaceArr[freeIndex]){
-            drawShape(x, y);
-            freeSpaceArr[freeIndex] = false;
+        let index = getIndex(x, y, gameArr);
+
+        if (freeSpaceArr[index] == FREE){
+
+            if (isCircle){
+                drawCircle(x, y);
+                freeSpaceArr[index] = CIRCLE;
+                isCircle = false;
+            }
+            else {
+                drawX(x, y);
+                freeSpaceArr[index] = X;
+                isCircle = true;
+            }
         }
     };
 
@@ -67,7 +84,7 @@ function drawBoard() {
         return 0;
     }
 
-    function getFreeIndex(x, y, maxArray, freeSpaceArr){
+    function getIndex(x, y, maxArray){
         let index = -1;
 
         for (let i=0; i<maxArray.length; i++){
@@ -80,18 +97,6 @@ function drawBoard() {
         }
 
         return index;
-    }
-
-    let isCircle = true;
-    function drawShape(x, y){
-        if (isCircle){
-            drawCircle(x, y);
-            isCircle = false;
-        }
-        else{
-            drawX(x, y);
-            isCircle = true;
-        }
     }
 
     function drawCircle(x, y) {
