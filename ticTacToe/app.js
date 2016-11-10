@@ -7,12 +7,10 @@ function drawBoard() {
     const context = document.getElementById('canvas').getContext('2d');
     const N = 3;
 
-    let maxBounds = [];
     let gameArr = [];
     let index = 0;
     for (let i=0; i<N; i++ ){
         let y = i+1;
-        maxBounds[i] = 50*(y+1);
 
         for (let j=0; j<N; j++){
             let x = j+1;
@@ -28,18 +26,33 @@ function drawBoard() {
     let onmousedown = function(e){
         let mouseX = e.pageX - this.offsetLeft;
         let mouseY = e.pageY - this.offsetTop;
-        let x = isGreaterThan(maxBounds, mouseX);
-        let y = isGreaterThan(maxBounds, mouseY);
+        let x = getXCoordInQuadrant(gameArr, mouseX, N);
+        let y = getYCoordInQuadrant(gameArr, mouseY, N);
         drawShape(x, y);
     };
 
     canvas.addEventListener("mousedown", onmousedown);
 
-    function isGreaterThan(maxArray, pos) {
-        for (let i=0; i<maxArray.length; i++){
-            if (maxArray[i]>pos){
-                return maxArray[i];
+    function getXCoordInQuadrant(maxArray, pos, N) {
+
+        for (let i=0; i<N; i++){
+            if (maxArray[i][0]>pos){
+                return maxArray[i][0];
             }
+        }
+        return 0;
+    }
+
+    function getYCoordInQuadrant(maxArray, pos, N) {
+
+        let yIndex = 0;
+        for (let i=0; i<N; i++){
+
+            if (maxArray[yIndex][1]>pos){
+                return maxArray[yIndex][1];
+            }
+
+            yIndex += 3;
         }
         return 0;
     }
