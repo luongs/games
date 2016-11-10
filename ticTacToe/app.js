@@ -9,6 +9,7 @@ function drawBoard() {
 
     let gameArr = [];
     let index = 0;
+    // Create game grid
     for (let i=0; i<N; i++ ){
         let y = i+1;
 
@@ -21,7 +22,12 @@ function drawBoard() {
             context.strokeRect(50*x, 50*y, 50, 50);
         }
     }
-    console.log(gameArr);
+
+    // Create empty filled array
+    let freeSpaceArr = [];
+    for (let i=0; i<gameArr.length; i++){
+        freeSpaceArr[i] = false;
+    }
 
     let onmousedown = function(e){
         let mouseX = e.pageX - this.offsetLeft;
@@ -37,6 +43,7 @@ function drawBoard() {
 
         for (let i=0; i<N; i++){
             if (maxArray[i][0]>pos){
+                console.log("x coord: "+maxArray[i][0]);
                 return maxArray[i][0];
             }
         }
@@ -49,6 +56,7 @@ function drawBoard() {
         for (let i=0; i<N; i++){
 
             if (maxArray[yIndex][1]>pos){
+                console.log("y coord: "+maxArray[yIndex][1]);
                 return maxArray[yIndex][1];
             }
 
