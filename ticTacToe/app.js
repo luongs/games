@@ -26,7 +26,7 @@ function drawBoard() {
     // Create empty filled array
     let freeSpaceArr = [];
     for (let i=0; i<gameArr.length; i++){
-        freeSpaceArr[i] = false;
+        freeSpaceArr[i] = true;
     }
 
     let onmousedown = function(e){
@@ -34,7 +34,11 @@ function drawBoard() {
         let mouseY = e.pageY - this.offsetTop;
         let x = getXCoordInQuadrant(gameArr, mouseX, N);
         let y = getYCoordInQuadrant(gameArr, mouseY, N);
-        drawShape(x, y);
+        let freeIndex = getFreeIndex(x, y, gameArr, freeSpaceArr);
+        if (freeSpaceArr[freeIndex]){
+            drawShape(x, y);
+            freeSpaceArr[freeIndex] = false;
+        }
     };
 
     canvas.addEventListener("mousedown", onmousedown);
@@ -43,7 +47,6 @@ function drawBoard() {
 
         for (let i=0; i<N; i++){
             if (maxArray[i][0]>pos){
-                console.log("x coord: "+maxArray[i][0]);
                 return maxArray[i][0];
             }
         }
@@ -56,13 +59,27 @@ function drawBoard() {
         for (let i=0; i<N; i++){
 
             if (maxArray[yIndex][1]>pos){
-                console.log("y coord: "+maxArray[yIndex][1]);
                 return maxArray[yIndex][1];
             }
 
             yIndex += 3;
         }
         return 0;
+    }
+
+    function getFreeIndex(x, y, maxArray, freeSpaceArr){
+        let index = -1;
+
+        for (let i=0; i<maxArray.length; i++){
+            for (let j=0; j<maxArray[i].length; j++){
+                if (x == maxArray[i][0] && y == maxArray[i][1]){
+                    index = i;
+                    return index;
+                }
+            }
+        }
+
+        return index;
     }
 
     let isCircle = true;
