@@ -65,9 +65,11 @@ function drawBoard() {
                 // TODO: Stop game
                 //       clear board and prompt
                 msg.innerHTML = "X is the winner!";
+                freeSpaceArr = freezeBoard(freeSpaceArr);
             }
             else if (winner == O_WIN){
                 msg.innerHTML = "O is the winner!";
+                freeSpaceArr = freezeBoard(freeSpaceArr);
             }
         }
     };
@@ -142,17 +144,15 @@ function drawBoard() {
 
         // check horizontal
         for (let i=0; i<freeSpaceArr.length; i++){
-            if (total == X_WIN || total == O_WIN){
-                return total;
-            }
-
-            if (index == N){
-                index = 0;
+            if (index%N === 0){
                 total = 0;
             }
-            else {
-                total += freeSpaceArr[index];
-                index++;
+
+            total += freeSpaceArr[index];
+            index++;
+
+            if (total == X_WIN || total == O_WIN){
+                return total;
             }
         }
 
@@ -160,18 +160,18 @@ function drawBoard() {
         index = 0;
         total = 0;
         for (let i=0; i<freeSpaceArr.length; i++){
+
+            if (index >= freeSpaceArr.length){
+                index -= 8; // 8 will set index to the start of adj row
+                total = 0;
+            }
+            total += freeSpaceArr[index];
+            index += N;
+
             if (total == X_WIN || total == O_WIN){
                 return total;
             }
 
-            if (index > freeSpaceArr.length){
-                index -= 8; // 8 will set index to the start of adj row
-                total = 0;
-            }
-            else {
-                total += freeSpaceArr[index];
-                index += N;
-            }
         }
 
         // check diagonal
@@ -190,5 +190,9 @@ function drawBoard() {
         }
 
         return 0;
+    }
+
+    function freezeBoard(freeSpaceArr){
+        return freeSpaceArr.fill(-2);
     }
 }
