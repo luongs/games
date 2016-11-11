@@ -140,9 +140,31 @@ function drawBoard() {
     function checkWinner(freeSpaceArr) {
 
         let total = 0;
-        let index = 0;
 
-        // check horizontal
+        total = checkHorizontal(freeSpaceArr);
+        if (total == X_WIN || total == O_WIN){
+            return total;
+        }
+
+        total = 0;
+        total = checkVertical(freeSpaceArr);
+        if (total == X_WIN || total == O_WIN){
+            return total;
+        }
+
+        total = 0;
+        total = checkDiagonal(freeSpaceArr);
+        if (total == X_WIN || total == O_WIN){
+            return total;
+        }
+
+        return 0;
+    }
+
+    function checkHorizontal(freeSpaceArr){
+        let index = 0;
+        let total = 0;
+
         for (let i=0; i<freeSpaceArr.length; i++){
             if (index%N === 0){
                 total = 0;
@@ -155,12 +177,14 @@ function drawBoard() {
                 return total;
             }
         }
+        return total;
+    }
 
-        // check vertical
-        index = 0;
-        total = 0;
+    function checkVertical(freeSpaceArr){
+        let index = 0;
+        let total = 0;
+
         for (let i=0; i<freeSpaceArr.length; i++){
-
             if (index >= freeSpaceArr.length){
                 index -= 8; // 8 will set index to the start of adj row
                 total = 0;
@@ -171,11 +195,14 @@ function drawBoard() {
             if (total == X_WIN || total == O_WIN){
                 return total;
             }
-
         }
+        return total;
+    }
 
-        // check diagonal
-        index = 0;
+    function checkDiagonal(freeSpaceArr){
+        let index = 0;
+        let total = 0;
+
         total = freeSpaceArr[index] + freeSpaceArr[index+4] +
                 freeSpaceArr[index+8];
         if (total == X_WIN || total == O_WIN){
@@ -188,8 +215,8 @@ function drawBoard() {
         if (total == X_WIN || total == O_WIN){
             return total;
         }
+        return total;
 
-        return 0;
     }
 
     function freezeBoard(freeSpaceArr){
