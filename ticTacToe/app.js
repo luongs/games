@@ -6,6 +6,7 @@
 function drawBoard() {
     const canvas = document.getElementById('canvas');
     const context = document.getElementById('canvas').getContext('2d');
+    const msg = document.getElementById('msg');
     const N = 3;
 
     let gameArr = [];
@@ -63,10 +64,10 @@ function drawBoard() {
             if (winner == X_WIN){
                 // TODO: Stop game
                 //       clear board and prompt
-                console.log("X is the winner!");
+                msg.innerHTML = "X is the winner!";
             }
             else if (winner == O_WIN){
-                console.log("O is the winner!");
+                msg.innerHTML = "O is the winner!";
             }
         }
     };
