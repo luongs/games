@@ -1,5 +1,6 @@
 /*jslint node: true */
-/*jshint esversion: 6 */
+/*jshint esversion: 6 */    // allow es6 syntax
+/*jslint browser:true */    // ignore document error
 "use strict";
 
 function drawBoard() {
