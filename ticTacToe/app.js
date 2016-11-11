@@ -32,8 +32,10 @@ function drawBoard() {
 
 
     let isCircle = true;
-    let O = 1;
-    let X = -1;
+    let O = -1;
+    let X = 1;
+    let O_WIN = -3;
+    let X_WIN = 3;
 
     // Majority of game logic
     let onmousedown = function(e){
@@ -57,11 +59,15 @@ function drawBoard() {
             }
 
             let winner = checkWinner(freeSpaceArr);
-            if (winner == 3 || winner == -3){
-                console.log("We have a winner!");
+            if (winner == X_WIN){
+                // TODO: Stop game
+                //       clear board and prompt
+                console.log("X is the winner!");
+            }
+            else if (winner == O_WIN){
+                console.log("O is the winner!");
             }
         }
-        console.log(freeSpaceArr);
     };
 
     canvas.addEventListener("mousedown", onmousedown);
@@ -127,14 +133,12 @@ function drawBoard() {
         context.stroke();
     }
 
-    let X_WIN = 3;
-    let O_WIN = -3;
     function checkWinner(freeSpaceArr) {
 
         let total = 0;
         let index = 0;
 
-        // Check horizontal
+        // check horizontal
         for (let i=0; i<freeSpaceArr.length; i++){
             if (total == X_WIN || total == O_WIN){
                 return total;
@@ -150,9 +154,39 @@ function drawBoard() {
             }
         }
 
-        // TODO: check vertical
+        // check vertical
+        index = 0;
+        total = 0;
+        for (let i=0; i<freeSpaceArr.length; i++){
+            if (total == X_WIN || total == O_WIN){
+                return total;
+            }
 
-        return -1;
+            if (index > freeSpaceArr.length){
+                index -= 8; // 8 will set index to the start of adj row
+                total = 0;
+            }
+            else {
+                total += freeSpaceArr[index];
+                index += N;
+            }
+        }
 
+        // check diagonal
+        index = 0;
+        total = freeSpaceArr[index] + freeSpaceArr[index+4] +
+                freeSpaceArr[index+8];
+        if (total == X_WIN || total == O_WIN){
+            return total;
+        }
+
+        index = 2;
+        total = freeSpaceArr[index] + freeSpaceArr[index+2] +
+                freeSpaceArr[index+4];
+        if (total == X_WIN || total == O_WIN){
+            return total;
+        }
+
+        return 0;
     }
 }
