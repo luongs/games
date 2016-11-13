@@ -7,30 +7,41 @@ function drawBoard() {
     const canvas = document.getElementById('canvas');
     const context = document.getElementById('canvas').getContext('2d');
     const msg = document.getElementById('msg');
+    const restartButton = document.getElementById('restart');
     const N = 3;
 
-    let gameArr = [];
-    let index = 0;
-    // Create game grid
-    for (let i=0; i<N; i++ ){
-        let y = i+1;
 
-        for (let j=0; j<N; j++){
-            let x = j+1;
+    function createGameArr(){
+        let index = 0;
+        let gameArr = [];
 
-            let coordArr = [(50*(x+1)), (50*(y+1))];
-            gameArr[index++] = coordArr;
+        for (let i=0; i<N; i++ ){
+            let y = i+1;
 
-            context.strokeRect(50*x, 50*y, 50, 50);
+            for (let j=0; j<N; j++){
+                let x = j+1;
+
+                let coordArr = [(50*(x+1)), (50*(y+1))];
+                gameArr[index++] = coordArr;
+
+                context.strokeRect(50*x, 50*y, 50, 50);
+            }
         }
+        return gameArr;
     }
 
-    // Create empty filled array
     let FREE = 0;
-    let freeSpaceArr = [];
-    for (let i=0; i<gameArr.length; i++){
-        freeSpaceArr[i] = FREE;
+    function createFreeSpaceArr(gameArr){
+        let freeSpaceArr = [];
+        for (let i=0; i<gameArr.length; i++){
+            freeSpaceArr[i] = FREE;
+        }
+        return freeSpaceArr;
     }
+
+    // Setup board
+    let gameArr = createGameArr();
+    let freeSpaceArr = createFreeSpaceArr(gameArr);
 
 
     let isCircle = true;
@@ -62,7 +73,7 @@ function drawBoard() {
 
             let winner = checkWinner(freeSpaceArr);
             if (winner == X_WIN){
-                // TODO: Stop game
+                // TODO:
                 //       clear board and prompt
                 msg.innerHTML = "X is the winner!";
                 freeSpaceArr = freezeBoard(freeSpaceArr);
@@ -222,4 +233,17 @@ function drawBoard() {
     function freezeBoard(freeSpaceArr){
         return freeSpaceArr.fill(-2);
     }
+
+    const WHITE = "#ffffff";
+    function clearCanvas(){
+        context.fillStyle = WHITE;
+        context.fillRect(0, 0, context.canvas.width, context.canvas.height );
+
+    }
+
+    restartButton.onclick = function ( e ){
+        clearCanvas();
+        gameArr = createGameArr();
+        freeSpaceArr = createFreeSpaceArr(gameArr);
+    };
 }
