@@ -6,13 +6,23 @@
 let express = require('express');
 let app = express();
 let http = require('http').Server(app);
-let io = require('socket.io')(http);
+var io = require('socket.io')(http);
 
 app.use(express.static('public'));
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
+
+io.on('connection', function(socket){
+
+    socket.emit('connectMsg', 'A user connected');
+
+    socket.on('disconnect', function(){
+        console.log('A user disconnected');
+    });
+});
+
 
 http.listen(3000, function(){
     console.log('listening on *:3000');

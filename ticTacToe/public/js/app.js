@@ -9,7 +9,12 @@ function drawBoard() {
     const msg = document.getElementById('msg');
     const restartButton = document.getElementById('restart');
     const N = 3;
+    let socket = io();
 
+    socket.on('connectMsg', function(chatMsg){
+        console.log(chatMsg);
+        msg.innerHtml = chatMsg;
+    });
 
     function createGameArr(){
         let index = 0;
