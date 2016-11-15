@@ -215,14 +215,14 @@ function drawBoard() {
         let total = 0;
 
         total = freeSpaceArr[index] + freeSpaceArr[index+4] +
-                freeSpaceArr[index+8];
+            freeSpaceArr[index+8];
         if (total == X_WIN || total == O_WIN){
             return total;
         }
 
         index = 2;
         total = freeSpaceArr[index] + freeSpaceArr[index+2] +
-                freeSpaceArr[index+4];
+            freeSpaceArr[index+4];
         if (total == X_WIN || total == O_WIN){
             return total;
         }

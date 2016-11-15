@@ -1,0 +1,16 @@
+{
+  "name": "ticTacToe",
+  "version": "1.0.0",
+  "description": "Multiplayer Tic Tac Toe",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/ma3lstrom/games",
+    "type": "git"
+  },
+  "author": "Sebastien Luong",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.5.1"
+  }
+}
