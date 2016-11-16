@@ -16,6 +16,12 @@ function drawBoard() {
         msg.innerHTML = chatMsg;
     });
 
+    socket.emit("pickQuadrant", "meep");
+
+    socket.on('emitQuadrant', function(data){
+        console.log("client!" +data);
+    });
+
     function createGameArr(){
         let index = 0;
         let gameArr = [];
@@ -62,6 +68,11 @@ function drawBoard() {
         let x = getXCoordInQuadrant(gameArr, mouseX, N);
         let y = getYCoordInQuadrant(gameArr, mouseY, N);
         let index = getIndex(x, y, gameArr);
+
+
+        let coord = {dataX: x, dataY: y};
+        console.log("My coordinates: "+coord.dataX+" "+coord.dataY);
+        //socket.emit('pickQuadrant', {dataX: x, dataY: y});
 
         if (freeSpaceArr[index] == FREE){
 

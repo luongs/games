@@ -18,6 +18,11 @@ io.on('connection', function(socket){
 
     io.emit('connectMsg', 'A user connected');
 
+    socket.on('pickQuadrant', function(data){
+        io.emit('emitQuadrant', data);
+        console.log("Server: "+data);
+    });
+
     socket.on('disconnect', function(){
         console.log('A user disconnected');
     });
