@@ -13,7 +13,7 @@ function drawBoard() {
 
     socket.on('connectMsg', function(chatMsg){
         console.log(chatMsg);
-        msg.innerHtml = chatMsg;
+        msg.innerHTML = chatMsg;
     });
 
     function createGameArr(){
