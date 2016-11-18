@@ -11,11 +11,6 @@ function drawBoard() {
     const N = 3;
     let socket = io();
 
-    socket.on('emitQuadrant', function(data){
-        console.log("client! "+data.dataX+ ", "+data.dataY);
-    });
-
-
     function createGameArr(){
         let index = 0;
         let gameArr = [];
@@ -55,6 +50,17 @@ function drawBoard() {
     let O_WIN = -3;
     let X_WIN = 3;
 
+    socket.on('emitQuadrant', function(data){
+        if (data.isCircleKey){
+            drawCircle(data.xKey, data.yKey);
+            freeSpaceArr[data.indexKey] = O;
+        }
+        else {
+            drawX(data.xKey, data.yKey);
+            freeSpaceArr[data.indexKey] = X;
+        }
+    });
+
     // Majority of game logic
     let onmousedown = function(e){
         let mouseX = e.pageX - this.offsetLeft;
@@ -63,21 +69,23 @@ function drawBoard() {
         let y = getYCoordInQuadrant(gameArr, mouseY, N);
         let index = getIndex(x, y, gameArr);
 
-
-        let coord = {dataX: x, dataY: y};
-        socket.emit('pickQuadrant', {dataX: x, dataY: y});
-
+        let data = {xKey: x, yKey: y, indexKey: index};
 
         if (freeSpaceArr[index] == FREE){
 
             if (isCircle){
+
                 drawCircle(x, y);
                 freeSpaceArr[index] = O;
+                data.isCircleKey= isCircle;
+                socket.emit('pickQuadrant', data);
                 isCircle = false;
             }
             else {
                 drawX(x, y);
                 freeSpaceArr[index] = X;
+                data.isCircleKey = isCircle;
+                socket.emit('pickQuadrant', data);
                 isCircle = true;
             }
 

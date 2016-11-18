@@ -19,7 +19,7 @@ io.on('connection', function(socket){
     io.emit('connectMsg', 'A user connected');
 
     socket.on('pickQuadrant', function(data){
-        io.emit('emitQuadrant', data);
+        socket.broadcast.emit('emitQuadrant', data);
     });
 
     socket.on('disconnect', function(){
