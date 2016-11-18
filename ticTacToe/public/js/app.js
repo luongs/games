@@ -11,16 +11,10 @@ function drawBoard() {
     const N = 3;
     let socket = io();
 
-    socket.on('connectMsg', function(chatMsg){
-        console.log(chatMsg);
-        msg.innerHTML = chatMsg;
-    });
-
-    socket.emit("pickQuadrant", "meep");
-
     socket.on('emitQuadrant', function(data){
-        console.log("client!" +data);
+        console.log("client! "+data.dataX+ ", "+data.dataY);
     });
+
 
     function createGameArr(){
         let index = 0;
@@ -71,8 +65,8 @@ function drawBoard() {
 
 
         let coord = {dataX: x, dataY: y};
-        console.log("My coordinates: "+coord.dataX+" "+coord.dataY);
-        //socket.emit('pickQuadrant', {dataX: x, dataY: y});
+        socket.emit('pickQuadrant', {dataX: x, dataY: y});
+
 
         if (freeSpaceArr[index] == FREE){
 
@@ -89,8 +83,6 @@ function drawBoard() {
 
             let winner = checkWinner(freeSpaceArr);
             if (winner == X_WIN){
-                // TODO:
-                //       clear board and prompt
                 msg.innerHTML = "X is the winner!";
                 freeSpaceArr = freezeBoard(freeSpaceArr);
             }

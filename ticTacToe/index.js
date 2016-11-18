@@ -20,7 +20,6 @@ io.on('connection', function(socket){
 
     socket.on('pickQuadrant', function(data){
         io.emit('emitQuadrant', data);
-        console.log("Server: "+data);
     });
 
     socket.on('disconnect', function(){
