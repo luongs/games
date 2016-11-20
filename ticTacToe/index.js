@@ -14,16 +14,18 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
+let numUsers = 0;
 io.on('connection', function(socket){
 
-    io.emit('connectMsg', 'A user connected');
+
+    io.emit('connectMsg', ++numUsers);
 
     socket.on('pickQuadrant', function(data){
         socket.broadcast.emit('emitQuadrant', data);
     });
 
     socket.on('disconnect', function(){
-        console.log('A user disconnected');
+        io.emit('disconnect', --numUsers);
     });
 });
 

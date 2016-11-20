@@ -11,6 +11,15 @@ function drawBoard() {
     const N = 3;
     let socket = io();
 
+
+    socket.on('connectMsg', function(data){
+        console.log("Number of online users: "+data);
+    });
+
+    socket.on('disconnect', function(data){
+        console.log("Number of online users: "+data);
+    });
+
     function createGameArr(){
         let index = 0;
         let gameArr = [];
@@ -60,6 +69,10 @@ function drawBoard() {
             freeSpaceArr[data.indexKey] = X;
         }
     });
+
+    //TODO: Emit win/loss status to multiple sessions
+    //      Lock play until next player makes a move
+    //      Emit restart to mult sessions
 
     // Majority of game logic
     let onmousedown = function(e){
