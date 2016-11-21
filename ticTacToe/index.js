@@ -24,6 +24,10 @@ io.on('connection', function(socket){
         socket.broadcast.emit('emitQuadrant', data);
     });
 
+    socket.on('alertWinner', function(msg){
+        socket.broadcast.emit('emitWinner', msg);
+    });
+
     socket.on('disconnect', function(){
         io.emit('disconnect', --numUsers);
     });

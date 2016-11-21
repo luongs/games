@@ -23,6 +23,11 @@ function drawBoard() {
         numUsers = data;
     });
 
+    socket.on('emitWinner', function(data){
+        msg.innerHTML = data;
+        freeSpaceArr = freezeBoard(freeSpaceArr);
+    });
+
     function createGameArr(){
         let index = 0;
         let gameArr = [];
@@ -106,12 +111,17 @@ function drawBoard() {
             }
 
             let winner = checkWinner(freeSpaceArr);
+            const X_WIN_MSG = "X is the winner!";
+            const O_WIN_MSG = "O is the winner!";
             if (winner == X_WIN){
-                msg.innerHTML = "X is the winner!";
+
+                socket.emit('alertWinner', X_WIN_MSG);
+                msg.innerHTML = X_WIN_MSG;
                 freeSpaceArr = freezeBoard(freeSpaceArr);
             }
             else if (winner == O_WIN){
-                msg.innerHTML = "O is the winner!";
+                socket.emit('alertWinner', O_WIN_MSG);
+                msg.innerHTML = O_WIN_MSG;
                 freeSpaceArr = freezeBoard(freeSpaceArr);
             }
         }
