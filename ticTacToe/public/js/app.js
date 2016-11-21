@@ -10,14 +10,17 @@ function drawBoard() {
     const restartButton = document.getElementById('restart');
     const N = 3;
     let socket = io();
+    let numUsers = 0;
 
 
     socket.on('connectMsg', function(data){
         console.log("Number of online users: "+data);
+        numUsers = data;
     });
 
     socket.on('disconnect', function(data){
         console.log("Number of online users: "+data);
+        numUsers = data;
     });
 
     function createGameArr(){
