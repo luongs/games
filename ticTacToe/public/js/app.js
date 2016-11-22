@@ -66,6 +66,7 @@ function drawBoard() {
     let X = 1;
     let O_WIN = -3;
     let X_WIN = 3;
+    let FREEZE_MOVE = false;
 
     socket.on('emitQuadrant', function(data){
         if (data.isCircleKey){
@@ -76,10 +77,11 @@ function drawBoard() {
             drawX(data.xKey, data.yKey);
             freeSpaceArr[data.indexKey] = X;
         }
+        FREEZE_MOVE = false;
     });
 
-    //TODO: Emit win/loss status to multiple sessions
-    //      Lock play until next player makes a move
+    //TODO:
+    //      Alternate X and O's
     //      Emit restart to mult sessions
 
     // Majority of game logic
@@ -91,23 +93,29 @@ function drawBoard() {
         let index = getIndex(x, y, gameArr);
 
         let data = {xKey: x, yKey: y, indexKey: index};
+        console.log("Freeze move val"+FREEZE_MOVE);
 
         if (freeSpaceArr[index] == FREE){
 
-            if (isCircle){
+            if (numUsers === 1 || FREEZE_MOVE === false) {
 
-                drawCircle(x, y);
-                freeSpaceArr[index] = O;
-                data.isCircleKey= isCircle;
-                socket.emit('pickQuadrant', data);
-                isCircle = false;
-            }
-            else {
-                drawX(x, y);
-                freeSpaceArr[index] = X;
-                data.isCircleKey = isCircle;
-                socket.emit('pickQuadrant', data);
-                isCircle = true;
+                if (isCircle){
+                    drawCircle(x, y);
+                    freeSpaceArr[index] = O;
+                    data.isCircleKey= isCircle;
+                    data.waitForMove = false;
+                    socket.emit('pickQuadrant', data);
+                    isCircle = false;
+                }
+                else {
+                    drawX(x, y);
+                    freeSpaceArr[index] = X;
+                    data.isCircleKey = isCircle;
+                    data.waitForMove = false;
+                    socket.emit('pickQuadrant', data);
+                    isCircle = true;
+                }
+                FREEZE_MOVE = true;
             }
 
             let winner = checkWinner(freeSpaceArr);
