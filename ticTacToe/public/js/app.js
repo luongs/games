@@ -27,6 +27,7 @@ function drawBoard() {
 
     socket.on('emitClearCanvas', function(data){
         console.log("Clearing canvas for multiplayer");
+        isMultiplayer = data;
         clearCanvas();
         gameArr = createGameArr();
         freeSpaceArr = createFreeSpaceArr(gameArr);
@@ -327,6 +328,6 @@ function drawBoard() {
 
     multiBtn.onclick = function ( e ){
         isMultiplayer = true;
-        socket.emit('clearCanvas', '');
+        socket.emit('clearCanvas', isMultiplayer);
     };
 }
