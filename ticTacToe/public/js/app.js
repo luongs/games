@@ -13,6 +13,7 @@ function drawBoard() {
     let socket = io();
     let playerNum = 0;
     let currentMoveIndex = 0;
+    let isMultiplayer = false;
 
 
     socket.on('connectMsg', function(data){
@@ -35,6 +36,11 @@ function drawBoard() {
     socket.on('disconnect', function(data){
         console.log("Number of online users: "+data);
         playerNum = data;
+
+        if (playerNum === 1){
+            multiBtn.style.visibility = "hidden";
+            isMultiplayer = false;
+        }
     });
 
     socket.on('emitWinner', function(data){
@@ -110,37 +116,47 @@ function drawBoard() {
         let index = getIndex(x, y, gameArr);
 
         let data = {xKey: x, yKey: y, indexKey: index};
+        console.log("isMultiplayer value:"+isMultiplayer);
+        console.log("Freeze move value: "+FREEZE_MOVE);
 
         if (freeSpaceArr[index] == FREE){
 
-            if (playerNum === 1 || FREEZE_MOVE === false) {
+            if (FREEZE_MOVE === false) {
 
                 if (currentMoveIndex % 2 === 0){
                     drawCircle(x, y);
                     freeSpaceArr[index] = O;
-                    data.moveIndex = currentMoveIndex++;
-                    socket.emit('pickQuadrant', data);
                 }
                 else {
                     drawX(x, y);
                     freeSpaceArr[index] = X;
-                    data.moveIndex = currentMoveIndex++;
-                    socket.emit('pickQuadrant', data);
                 }
-                FREEZE_MOVE = true;
+
+
+                if (isMultiplayer){
+                    data.moveIndex = currentMoveIndex;
+                    socket.emit('pickQuadrant', data);
+                    FREEZE_MOVE = true;
+                }
+
+                currentMoveIndex++;
             }
 
             let winner = checkWinner(freeSpaceArr);
             const X_WIN_MSG = "X is the winner!";
             const O_WIN_MSG = "O is the winner!";
-            if (winner == X_WIN){
 
-                socket.emit('alertWinner', X_WIN_MSG);
+            if (winner == X_WIN){
+                if (isMultiplayer){
+                    socket.emit('alertWinner', X_WIN_MSG);
+                }
                 msg.innerHTML = X_WIN_MSG;
                 freeSpaceArr = freezeBoard(freeSpaceArr);
             }
             else if (winner == O_WIN){
-                socket.emit('alertWinner', O_WIN_MSG);
+                if (isMultiplayer){
+                    socket.emit('alertWinner', O_WIN_MSG);
+                }
                 msg.innerHTML = O_WIN_MSG;
                 freeSpaceArr = freezeBoard(freeSpaceArr);
             }
@@ -310,6 +326,7 @@ function drawBoard() {
     };
 
     multiBtn.onclick = function ( e ){
+        isMultiplayer = true;
         socket.emit('clearCanvas', '');
     };
 }
