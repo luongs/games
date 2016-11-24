@@ -81,10 +81,11 @@ function drawBoard() {
     let O_WIN = -3;
     let X_WIN = 3;
     let FREEZE_MOVE = false;
-    let isCircle = true;
 
     socket.on('emitQuadrant', function(data){
-        if (data.isCircleKey){
+        currentMoveIndex = data.moveIndex;
+
+        if (currentMoveIndex % 2 === 0){
             drawCircle(data.xKey, data.yKey);
             freeSpaceArr[data.indexKey] = O;
         }
@@ -92,11 +93,12 @@ function drawBoard() {
             drawX(data.xKey, data.yKey);
             freeSpaceArr[data.indexKey] = X;
         }
+
         FREEZE_MOVE = false;
+        currentMoveIndex++;
     });
 
     //TODO:
-    //      Alternate X and O's
     //      Emit restart to mult sessions
 
     // Majority of game logic
@@ -108,25 +110,22 @@ function drawBoard() {
         let index = getIndex(x, y, gameArr);
 
         let data = {xKey: x, yKey: y, indexKey: index};
-        console.log("Freeze move val"+FREEZE_MOVE);
 
         if (freeSpaceArr[index] == FREE){
 
             if (playerNum === 1 || FREEZE_MOVE === false) {
 
-                if (isCircle){
+                if (currentMoveIndex % 2 === 0){
                     drawCircle(x, y);
                     freeSpaceArr[index] = O;
-                    data.isCircleKey= isCircle;
+                    data.moveIndex = currentMoveIndex++;
                     socket.emit('pickQuadrant', data);
-                    isCircle = false;
                 }
                 else {
                     drawX(x, y);
                     freeSpaceArr[index] = X;
-                    data.isCircleKey = isCircle;
+                    data.moveIndex = currentMoveIndex++;
                     socket.emit('pickQuadrant', data);
-                    isCircle = true;
                 }
                 FREEZE_MOVE = true;
             }
