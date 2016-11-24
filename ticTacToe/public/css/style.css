@@ -2,3 +2,7 @@
 button {
     visibility: visible;
 }
+
+button.multi {
+    visibility: hidden;
+}

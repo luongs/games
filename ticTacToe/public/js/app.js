@@ -8,25 +8,40 @@ function drawBoard() {
     const context = document.getElementById('canvas').getContext('2d');
     const msg = document.getElementById('msg');
     const restartButton = document.getElementById('restart');
+    const multiBtn = document.getElementById('multi');
     const N = 3;
     let socket = io();
-    let numUsers = 0;
+    let playerNum = 0;
+    let currentMoveIndex = 0;
 
 
     socket.on('connectMsg', function(data){
         console.log("Number of online users: "+data);
-        numUsers = data;
+        playerNum = data;
+
+        if (playerNum > 1){
+            multiBtn.style.visibility = "visible";
+        }
+    });
+
+    socket.on('emitClearCanvas', function(data){
+        console.log("Clearing canvas for multiplayer");
+        clearCanvas();
+        gameArr = createGameArr();
+        freeSpaceArr = createFreeSpaceArr(gameArr);
+        currentMoveIndex = 0;
     });
 
     socket.on('disconnect', function(data){
         console.log("Number of online users: "+data);
-        numUsers = data;
+        playerNum = data;
     });
 
     socket.on('emitWinner', function(data){
         msg.innerHTML = data;
         freeSpaceArr = freezeBoard(freeSpaceArr);
     });
+
 
     function createGameArr(){
         let index = 0;
@@ -61,12 +76,12 @@ function drawBoard() {
     let freeSpaceArr = createFreeSpaceArr(gameArr);
 
 
-    let isCircle = true;
     let O = -1;
     let X = 1;
     let O_WIN = -3;
     let X_WIN = 3;
     let FREEZE_MOVE = false;
+    let isCircle = true;
 
     socket.on('emitQuadrant', function(data){
         if (data.isCircleKey){
@@ -97,13 +112,12 @@ function drawBoard() {
 
         if (freeSpaceArr[index] == FREE){
 
-            if (numUsers === 1 || FREEZE_MOVE === false) {
+            if (playerNum === 1 || FREEZE_MOVE === false) {
 
                 if (isCircle){
                     drawCircle(x, y);
                     freeSpaceArr[index] = O;
                     data.isCircleKey= isCircle;
-                    data.waitForMove = false;
                     socket.emit('pickQuadrant', data);
                     isCircle = false;
                 }
@@ -111,7 +125,6 @@ function drawBoard() {
                     drawX(x, y);
                     freeSpaceArr[index] = X;
                     data.isCircleKey = isCircle;
-                    data.waitForMove = false;
                     socket.emit('pickQuadrant', data);
                     isCircle = true;
                 }
@@ -295,5 +308,9 @@ function drawBoard() {
         clearCanvas();
         gameArr = createGameArr();
         freeSpaceArr = createFreeSpaceArr(gameArr);
+    };
+
+    multiBtn.onclick = function ( e ){
+        socket.emit('clearCanvas', '');
     };
 }

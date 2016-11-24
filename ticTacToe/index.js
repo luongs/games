@@ -28,6 +28,10 @@ io.on('connection', function(socket){
         socket.broadcast.emit('emitWinner', msg);
     });
 
+    socket.on('clearCanvas', function(data){
+        io.emit('emitClearCanvas', data);
+    });
+
     socket.on('disconnect', function(){
         io.emit('disconnect', --numUsers);
     });
