@@ -7,7 +7,7 @@ function drawBoard() {
     const canvas = document.getElementById('canvas');
     const context = document.getElementById('canvas').getContext('2d');
     const msg = document.getElementById('msg');
-    const restartButton = document.getElementById('restart');
+    const singleBtn = document.getElementById('single');
     const multiBtn = document.getElementById('multi');
     const N = 3;
     let socket = io();
@@ -25,13 +25,26 @@ function drawBoard() {
         }
     });
 
-    socket.on('emitClearCanvas', function(data){
-        console.log("Clearing canvas for multiplayer");
+    socket.on('emitStartSingleplayer', function(data){
         isMultiplayer = data;
         clearCanvas();
         gameArr = createGameArr();
         freeSpaceArr = createFreeSpaceArr(gameArr);
         currentMoveIndex = 0;
+        multiBtn.innerHTML = "Multiplayer";
+        singleBtn.innerHTML = "Restart";
+        FREEZE_MOVE = false;
+    });
+
+    socket.on('emitStartMultiplayer', function(data){
+        isMultiplayer = data;
+        clearCanvas();
+        gameArr = createGameArr();
+        freeSpaceArr = createFreeSpaceArr(gameArr);
+        currentMoveIndex = 0;
+        multiBtn.innerHTML = "Restart";
+        singleBtn.innerHTML = "Single player";
+
     });
 
     socket.on('disconnect', function(data){
@@ -320,14 +333,13 @@ function drawBoard() {
 
     }
 
-    restartButton.onclick = function ( e ){
-        clearCanvas();
-        gameArr = createGameArr();
-        freeSpaceArr = createFreeSpaceArr(gameArr);
+    singleBtn.onclick = function ( e ){
+        isMultiplayer = false;
+        socket.emit('startSingleplayer', isMultiplayer);
     };
 
     multiBtn.onclick = function ( e ){
         isMultiplayer = true;
-        socket.emit('clearCanvas', isMultiplayer);
+        socket.emit('startMultiplayer', isMultiplayer);
     };
 }

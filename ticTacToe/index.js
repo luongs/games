@@ -28,8 +28,12 @@ io.on('connection', function(socket){
         socket.broadcast.emit('emitWinner', msg);
     });
 
-    socket.on('clearCanvas', function(data){
-        io.emit('emitClearCanvas', data);
+    socket.on('startSingleplayer', function(data){
+        io.emit('emitStartSingleplayer', data);
+    });
+
+    socket.on('startMultiplayer', function(data){
+        io.emit('emitStartMultiplayer', data);
     });
 
     socket.on('disconnect', function(){
