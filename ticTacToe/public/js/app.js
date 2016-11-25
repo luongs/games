@@ -31,6 +31,7 @@ function drawBoard() {
         gameArr = createGameArr();
         freeSpaceArr = createFreeSpaceArr(gameArr);
         currentMoveIndex = 0;
+        msg.innerHTML = "";
         multiBtn.innerHTML = "Multiplayer";
         singleBtn.innerHTML = "Restart";
         FREEZE_MOVE = false;
@@ -42,6 +43,7 @@ function drawBoard() {
         gameArr = createGameArr();
         freeSpaceArr = createFreeSpaceArr(gameArr);
         currentMoveIndex = 0;
+        msg.innerHTML = "";
         multiBtn.innerHTML = "Restart";
         singleBtn.innerHTML = "Single player";
 
@@ -118,8 +120,11 @@ function drawBoard() {
         currentMoveIndex++;
     });
 
-    //TODO:
-    //      Emit restart to mult sessions
+    //TODO: Single player AI
+    //      Message when waiting for opponent
+    //      Improve UI
+    //      Deploy app
+    //      Refactor
 
     // Majority of game logic
     let onmousedown = function(e){
@@ -130,8 +135,6 @@ function drawBoard() {
         let index = getIndex(x, y, gameArr);
 
         let data = {xKey: x, yKey: y, indexKey: index};
-        console.log("isMultiplayer value:"+isMultiplayer);
-        console.log("Freeze move value: "+FREEZE_MOVE);
 
         if (freeSpaceArr[index] == FREE){
 
