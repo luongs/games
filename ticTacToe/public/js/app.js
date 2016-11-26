@@ -122,8 +122,7 @@ function drawBoard() {
 
     //TODO: Single player AI
     //      Message when waiting for opponent
-    //      Improve UI
-    //      Deploy app
+    //      Improve UI - Make mobile first
     //      Refactor
 
     // Majority of game logic
