@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Multiplayer Tic Tac Toe",
   "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "repository": {
     "url": "https://github.com/ma3lstrom/games",
     "type": "git"
@@ -12,5 +15,9 @@
   "dependencies": {
     "express": "^4.14.0",
     "socket.io": "^1.5.1"
+  },
+  "engines": {
+    "node": "6.9.1"
   }
+
 }
