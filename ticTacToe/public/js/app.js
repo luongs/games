@@ -75,10 +75,10 @@ function drawBoard() {
             for (let j=0; j<N; j++){
                 let x = j+1;
 
-                let coordArr = [(50*(x+1)), (50*(y+1))];
+                let coordArr = [(100*(x+1)), (100*(y+1))];
                 gameArr[index++] = coordArr;
 
-                context.strokeRect(50*x, 50*y, 50, 50);
+                context.strokeRect(100*x, 100*y, 100, 100);
             }
         }
         return gameArr;
@@ -181,11 +181,13 @@ function drawBoard() {
 
     canvas.addEventListener("mousedown", onmousedown);
 
+    const X_OFFSET = 100;   // board is shifted 100 px over from css
     function getXCoordInQuadrant(maxArray, pos, N) {
 
         for (let i=0; i<N; i++){
-            if (maxArray[i][0]>pos){
-                return maxArray[i][0];
+            let xBound = maxArray[i][0]+X_OFFSET;
+            if (xBound > pos){
+                return xBound;
             }
         }
         return 0;
@@ -210,7 +212,8 @@ function drawBoard() {
 
         for (let i=0; i<maxArray.length; i++){
             for (let j=0; j<maxArray[i].length; j++){
-                if (x == maxArray[i][0] && y == maxArray[i][1]){
+                let xBound = maxArray[i][0]+X_OFFSET;
+                if (x == xBound && y == maxArray[i][1]){
                     index = i;
                     return index;
                 }
@@ -223,21 +226,21 @@ function drawBoard() {
     function drawCircle(x, y) {
         context.lineWidth = 2;
         context.beginPath();
-        context.arc(x-25, y-25, 20, 0, 2*Math.PI);
+        context.arc(x-150, y-50, 40, 0, 2*Math.PI);
         context.stroke();
     }
 
     function drawX(x, y) {
         context.lineWidth = 2;
         context.beginPath();
-        context.moveTo(x-10, y-10);
-        context.lineTo(x-40, y-40);
+        context.moveTo(x-180, y-80);
+        context.lineTo(x-120, y-20);
         context.closePath();
         context.stroke();
 
         context.beginPath();
-        context.moveTo(x-10, y-40);
-        context.lineTo(x-40, y-10);
+        context.moveTo(x-180, y-20);
+        context.lineTo(x-120, y-80);
         context.closePath();
         context.stroke();
     }

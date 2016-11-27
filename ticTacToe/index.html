@@ -9,14 +9,20 @@
 </head>
 
 <body onload="drawBoard()">
-    <div class="board">
-        <canvas id="canvas" width="550" height="550"></canvas>
+    <div class="container">
+        <div class="row">
+            <div class="board">
+                <canvas id="canvas" width="550" height="550"></canvas>
 
-    </div>
-    <div class="messages">
-        <h4 id="msg"></h4>
-        <button type="button" id="single">Restart</button>
-        <button type="button" id="multi" class="multi">Multiplayer</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="messages">
+                <h4 id="msg"></h4>
+                <button type="button" id="single">Restart</button>
+                <button type="button" id="multi" class="multi">Multiplayer</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>
