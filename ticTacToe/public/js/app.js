@@ -3,6 +3,8 @@
 /*jslint browser:true */    // ignore document error
 "use strict";
 
+//TODO: Bugs => Restarting single player should not reset all boards
+//           => Multi player restart should get first move
 function drawBoard() {
     const canvas = document.getElementById('canvas');
     const context = document.getElementById('canvas').getContext('2d');
@@ -30,6 +32,7 @@ function drawBoard() {
         clearCanvas();
         gameArr = createGameArr();
         freeSpaceArr = createFreeSpaceArr(gameArr);
+        eraseOuterSquare();
         currentMoveIndex = 0;
         msg.innerHTML = "";
         multiBtn.innerHTML = "Multiplayer";
@@ -42,6 +45,7 @@ function drawBoard() {
         clearCanvas();
         gameArr = createGameArr();
         freeSpaceArr = createFreeSpaceArr(gameArr);
+        eraseOuterSquare();
         currentMoveIndex = 0;
         msg.innerHTML = "";
         multiBtn.innerHTML = "Restart";
@@ -134,7 +138,6 @@ function drawBoard() {
 
     //TODO: Single player AI
     //      Message when waiting for opponent
-    //      Improve UI - Make mobile first
     //      Refactor
 
     // Majority of game logic
