@@ -65,6 +65,7 @@ function drawBoard() {
     });
 
 
+    const GREY = "#C0C0C0";
     function createGameArr(){
         let index = 0;
         let gameArr = [];
@@ -78,10 +79,20 @@ function drawBoard() {
                 let coordArr = [(100*(x+1)), (100*(y+1))];
                 gameArr[index++] = coordArr;
 
+                context.lineWidth = 2;
+                context.strokeStyle = GREY;
+                context.lineCap = "round";
                 context.strokeRect(100*x, 100*y, 100, 100);
             }
         }
         return gameArr;
+    }
+
+    const WHITE = "#FFFFFF";
+    function eraseOuterSquare(){
+        context.strokeStyle = WHITE;
+        context.lineWidth = 4;
+        context.strokeRect(100, 100, 300, 300);
     }
 
     let FREE = 0;
@@ -96,6 +107,7 @@ function drawBoard() {
     // Setup board
     let gameArr = createGameArr();
     let freeSpaceArr = createFreeSpaceArr(gameArr);
+    eraseOuterSquare();
 
 
     let O = -1;
@@ -223,15 +235,19 @@ function drawBoard() {
         return index;
     }
 
+    const YELLOW = "#f1c40f";
     function drawCircle(x, y) {
-        context.lineWidth = 2;
+        context.strokeStyle = YELLOW;
+        context.lineWidth = 8;
         context.beginPath();
-        context.arc(x-150, y-50, 40, 0, 2*Math.PI);
+        context.arc(x-150, y-50, 30, 0, 2*Math.PI);
         context.stroke();
     }
 
+    const GREEN = "#16a085";
     function drawX(x, y) {
-        context.lineWidth = 2;
+        context.strokeStyle = GREEN;
+        context.lineWidth = 8;
         context.beginPath();
         context.moveTo(x-180, y-80);
         context.lineTo(x-120, y-20);
@@ -331,7 +347,6 @@ function drawBoard() {
         return freeSpaceArr.fill(-2);
     }
 
-    const WHITE = "#ffffff";
     function clearCanvas(){
         context.fillStyle = WHITE;
         context.fillRect(0, 0, context.canvas.width, context.canvas.height );
