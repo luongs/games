@@ -6,3 +6,7 @@ button {
 button.multi {
     visibility: hidden;
 }
+
+div.container {
+    margin-left:70px;
+}
