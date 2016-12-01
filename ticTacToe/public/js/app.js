@@ -3,7 +3,7 @@
 /*jslint browser:true */    // ignore document error
 "use strict";
 
-//TODO: Bugs => Restarting single player should not reset all boards
+//TODO:
 //           => Multi player restart should get first move
 function drawBoard() {
     const canvas = document.getElementById('canvas');
@@ -28,7 +28,7 @@ function drawBoard() {
     });
 
     socket.on('emitStartSingleplayer', function(data){
-        isMultiplayer = data;
+        isMultiplayer = data.isMultiplayer;
         clearCanvas();
         gameArr = createGameArr();
         freeSpaceArr = createFreeSpaceArr(gameArr);
@@ -37,6 +37,7 @@ function drawBoard() {
         msg.innerHTML = "";
         multiBtn.innerHTML = "Multiplayer";
         singleBtn.innerHTML = "Restart";
+        msg.innerHTML = data.msg;
         FREEZE_MOVE = false;
     });
 
@@ -357,8 +358,22 @@ function drawBoard() {
     }
 
     singleBtn.onclick = function ( e ){
-        isMultiplayer = false;
-        socket.emit('startSingleplayer', isMultiplayer);
+        clearCanvas();
+        gameArr = createGameArr();
+        freeSpaceArr = createFreeSpaceArr(gameArr);
+        eraseOuterSquare();
+        currentMoveIndex = 0;
+        msg.innerHTML = "";
+        multiBtn.innerHTML = "Multiplayer";
+        singleBtn.innerHTML = "Restart";
+        FREEZE_MOVE = false;
+
+        // Reset board if a multiplayer game was started
+        if (isMultiplayer){
+            let data = {isMultiplayer: false,
+                    msg: "Other player started single player"};
+            socket.emit('startSingleplayer', data);
+        }
     };
 
     multiBtn.onclick = function ( e ){

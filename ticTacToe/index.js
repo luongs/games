@@ -29,7 +29,7 @@ io.on('connection', function(socket){
     });
 
     socket.on('startSingleplayer', function(data){
-        io.emit('emitStartSingleplayer', data);
+        socket.broadcast.emit('emitStartSingleplayer', data);
     });
 
     socket.on('startMultiplayer', function(data){
