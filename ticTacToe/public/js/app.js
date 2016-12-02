@@ -3,8 +3,6 @@
 /*jslint browser:true */    // ignore document error
 "use strict";
 
-//TODO:
-//           => Multi player restart should get first move
 function drawBoard() {
     const canvas = document.getElementById('canvas');
     const context = document.getElementById('canvas').getContext('2d');
@@ -51,6 +49,7 @@ function drawBoard() {
         msg.innerHTML = "";
         multiBtn.innerHTML = "Restart";
         singleBtn.innerHTML = "Single player";
+        FREEZE_MOVE = false;
 
     });
 
