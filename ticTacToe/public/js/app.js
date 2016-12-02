@@ -123,6 +123,7 @@ function drawBoard() {
 
     socket.on('emitQuadrant', function(data){
         currentMoveIndex = data.moveIndex;
+        msg.innerHTML = "";
 
         if (currentMoveIndex % 2 === 0){
             drawCircle(data.xKey, data.yKey);
@@ -138,7 +139,6 @@ function drawBoard() {
     });
 
     //TODO: Single player AI
-    //      Message when waiting for opponent
     //      Refactor
 
     // Majority of game logic
@@ -168,6 +168,7 @@ function drawBoard() {
                 if (isMultiplayer){
                     data.moveIndex = currentMoveIndex;
                     socket.emit('pickQuadrant', data);
+                    msg.innerHTML = "Waiting...";
                     FREEZE_MOVE = true;
                 }
 
