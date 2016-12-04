@@ -11,7 +11,7 @@ function getContext() {
     return document.getElementById('canvas').getContext('2d');
 }
 
-function drawBoard(canvas, context) {
+function exec(canvas, context) {
     const msg = document.getElementById('msg');
     const singleBtn = document.getElementById('single');
     const multiBtn = document.getElementById('multi');
@@ -33,7 +33,7 @@ function drawBoard(canvas, context) {
 
     socket.on('emitStartSingleplayer', function(data){
         isMultiplayer = data.isMultiplayer;
-        clearCanvas();
+        clearCanvas(context, canvas);
         gameArr = createGameArr(context, N);
         freeSpaceArr = createFreeSpaceArr(gameArr);
         eraseOuterSquare(context);
@@ -47,7 +47,7 @@ function drawBoard(canvas, context) {
 
     socket.on('emitStartMultiplayer', function(data){
         isMultiplayer = data;
-        clearCanvas();
+        clearCanvas(context, canvas);
         gameArr = createGameArr(context, N);
         freeSpaceArr = createFreeSpaceArr(gameArr);
         eraseOuterSquare(context);
@@ -315,18 +315,8 @@ function drawBoard(canvas, context) {
 
     }
 
-    function freezeBoard(freeSpaceArr){
-        return freeSpaceArr.fill(-2);
-    }
-
-    function clearCanvas(){
-        context.fillStyle = WHITE;
-        context.fillRect(0, 0, context.canvas.width, context.canvas.height );
-
-    }
-
     singleBtn.onclick = function ( e ){
-        clearCanvas();
+        clearCanvas(context, canvas);
         gameArr = createGameArr(context, N);
         freeSpaceArr = createFreeSpaceArr(gameArr);
         eraseOuterSquare(context);
@@ -350,6 +340,7 @@ function drawBoard(canvas, context) {
     };
 }
 
+//==============================================================
 // Board functions
 const GREY = "#C0C0C0";
 let createGameArr = function(context, numColumns){
@@ -391,11 +382,25 @@ function createFreeSpaceArr(gameArr){
     return freeSpaceArr;
 }
 
+const TAKEN = -2;
+function freezeBoard(freeSpaceArr){
+    return freeSpaceArr.fill(TAKEN);
+}
+
+function clearCanvas(context, canvas){
+    context.fillStyle = WHITE;
+    context.fillRect(0, 0, context.canvas.width, context.canvas.height );
+
+}
+
+
+//==============================================================
+
 window.onload = function (e){
 
     const canvas = getCanvas();
     const context = getContext();
-    drawBoard(canvas, context);
+    exec(canvas, context);
 
 };
 
