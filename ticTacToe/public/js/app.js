@@ -38,9 +38,9 @@ function run(canvas, context) {
         freeSpaceArr = createFreeSpaceArr(gameArr);
         eraseOuterSquare(context);
         currentMoveIndex = 0;
+        msg.innerHTML = data.msg;
         multiBtn.innerHTML = "Multiplayer";
         singleBtn.innerHTML = "Restart";
-        msg.innerHTML = data.msg;
         FREEZE_MOVE = false;
     });
 
@@ -104,7 +104,7 @@ function run(canvas, context) {
     });
 
     //TODO: Single player AI
-    //      Refactor
+    //      Refactor into modules
 
     // Majority of game logic
     let onmousedown = function(e){
