@@ -11,7 +11,7 @@ function getContext() {
     return document.getElementById('canvas').getContext('2d');
 }
 
-function exec(canvas, context) {
+function run(canvas, context) {
     const msg = document.getElementById('msg');
     const singleBtn = document.getElementById('single');
     const multiBtn = document.getElementById('multi');
@@ -38,7 +38,6 @@ function exec(canvas, context) {
         freeSpaceArr = createFreeSpaceArr(gameArr);
         eraseOuterSquare(context);
         currentMoveIndex = 0;
-        msg.innerHTML = "";
         multiBtn.innerHTML = "Multiplayer";
         singleBtn.innerHTML = "Restart";
         msg.innerHTML = data.msg;
@@ -46,13 +45,13 @@ function exec(canvas, context) {
     });
 
     socket.on('emitStartMultiplayer', function(data){
-        isMultiplayer = data;
+        isMultiplayer = data.isMultiplayer;
         clearCanvas(context, canvas);
         gameArr = createGameArr(context, N);
         freeSpaceArr = createFreeSpaceArr(gameArr);
         eraseOuterSquare(context);
         currentMoveIndex = 0;
-        msg.innerHTML = "";
+        msg.innerHTML = data.msg;
         multiBtn.innerHTML = "Restart";
         singleBtn.innerHTML = "Single player";
         FREEZE_MOVE = false;
@@ -75,7 +74,6 @@ function exec(canvas, context) {
     });
 
 
-
     // Setup board
     let gameArr = createGameArr(context, N);
     let freeSpaceArr = createFreeSpaceArr(gameArr);
@@ -90,7 +88,7 @@ function exec(canvas, context) {
 
     socket.on('emitQuadrant', function(data){
         currentMoveIndex = data.moveIndex;
-        msg.innerHTML = "";
+        msg.innerHTML = data.msg;
 
         if (currentMoveIndex % 2 === 0){
             drawCircle(data.xKey, data.yKey, context);
@@ -134,6 +132,7 @@ function exec(canvas, context) {
 
                 if (isMultiplayer){
                     data.moveIndex = currentMoveIndex;
+                    data.msg = "";
                     socket.emit('pickQuadrant', data);
                     msg.innerHTML = "Waiting...";
                     FREEZE_MOVE = true;
@@ -179,6 +178,7 @@ function exec(canvas, context) {
 
         // Reset board if a multiplayer game was started
         if (isMultiplayer){
+            isMultiplayer = false;
             let data = {isMultiplayer: false,
                     msg: "Other player started single player"};
             socket.emit('startSingleplayer', data);
@@ -187,7 +187,9 @@ function exec(canvas, context) {
 
     multiBtn.onclick = function ( e ){
         isMultiplayer = true;
-        socket.emit('startMultiplayer', isMultiplayer);
+        let data = {isMultiplayer: true,
+            msg: "Multiplayer mode"};
+        socket.emit('startMultiplayer', data);
     };
 }
 
@@ -399,7 +401,7 @@ window.onload = function (e){
 
     const canvas = getCanvas();
     const context = getContext();
-    exec(canvas, context);
+    run(canvas, context);
 
 };
 
