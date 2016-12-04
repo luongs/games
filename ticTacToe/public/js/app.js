@@ -36,7 +36,7 @@ function drawBoard(canvas, context) {
         clearCanvas();
         gameArr = createGameArr(context, N);
         freeSpaceArr = createFreeSpaceArr(gameArr);
-        eraseOuterSquare();
+        eraseOuterSquare(context);
         currentMoveIndex = 0;
         msg.innerHTML = "";
         multiBtn.innerHTML = "Multiplayer";
@@ -50,7 +50,7 @@ function drawBoard(canvas, context) {
         clearCanvas();
         gameArr = createGameArr(context, N);
         freeSpaceArr = createFreeSpaceArr(gameArr);
-        eraseOuterSquare();
+        eraseOuterSquare(context);
         currentMoveIndex = 0;
         msg.innerHTML = "";
         multiBtn.innerHTML = "Restart";
@@ -75,26 +75,11 @@ function drawBoard(canvas, context) {
     });
 
 
-        const WHITE = "#FFFFFF";
-    function eraseOuterSquare(){
-        context.strokeStyle = WHITE;
-        context.lineWidth = 4;
-        context.strokeRect(100, 100, 300, 300);
-    }
-
-    let FREE = 0;
-    function createFreeSpaceArr(gameArr){
-        let freeSpaceArr = [];
-        for (let i=0; i<gameArr.length; i++){
-            freeSpaceArr[i] = FREE;
-        }
-        return freeSpaceArr;
-    }
 
     // Setup board
     let gameArr = createGameArr(context, N);
     let freeSpaceArr = createFreeSpaceArr(gameArr);
-    eraseOuterSquare();
+    eraseOuterSquare(context);
 
 
     let O = -1;
@@ -344,7 +329,7 @@ function drawBoard(canvas, context) {
         clearCanvas();
         gameArr = createGameArr(context, N);
         freeSpaceArr = createFreeSpaceArr(gameArr);
-        eraseOuterSquare();
+        eraseOuterSquare(context);
         currentMoveIndex = 0;
         msg.innerHTML = "";
         multiBtn.innerHTML = "Multiplayer";
@@ -365,6 +350,7 @@ function drawBoard(canvas, context) {
     };
 }
 
+// Board functions
 const GREY = "#C0C0C0";
 let createGameArr = function(context, numColumns){
     let index = 0;
@@ -388,6 +374,22 @@ let createGameArr = function(context, numColumns){
     return gameArr;
 };
 
+const WHITE = "#FFFFFF";
+let eraseOuterSquare = function(context){
+    context.strokeStyle = WHITE;
+    context.lineWidth = 4;
+    context.strokeRect(100, 100, 300, 300);
+};
+
+
+const FREE = 0;
+function createFreeSpaceArr(gameArr){
+    let freeSpaceArr = [];
+    for (let i=0; i<gameArr.length; i++){
+        freeSpaceArr[i] = FREE;
+    }
+    return freeSpaceArr;
+}
 
 window.onload = function (e){
 
