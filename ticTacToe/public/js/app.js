@@ -93,11 +93,11 @@ function exec(canvas, context) {
         msg.innerHTML = "";
 
         if (currentMoveIndex % 2 === 0){
-            drawCircle(data.xKey, data.yKey);
+            drawCircle(data.xKey, data.yKey, context);
             freeSpaceArr[data.indexKey] = O;
         }
         else {
-            drawX(data.xKey, data.yKey);
+            drawX(data.xKey, data.yKey, context);
             freeSpaceArr[data.indexKey] = X;
         }
 
@@ -123,11 +123,11 @@ function exec(canvas, context) {
             if (FREEZE_MOVE === false) {
 
                 if (currentMoveIndex % 2 === 0){
-                    drawCircle(x, y);
+                    drawCircle(x, y, context);
                     freeSpaceArr[index] = O;
                 }
                 else {
-                    drawX(x, y);
+                    drawX(x, y, context);
                     freeSpaceArr[index] = X;
                 }
 
@@ -142,7 +142,7 @@ function exec(canvas, context) {
                 currentMoveIndex++;
             }
 
-            let winner = checkWinner(freeSpaceArr);
+            let winner = checkWinner(freeSpaceArr, X_WIN, O_WIN, N);
             const X_WIN_MSG = "X is the winner!";
             const O_WIN_MSG = "O is the winner!";
 
@@ -165,155 +165,6 @@ function exec(canvas, context) {
 
     canvas.addEventListener("mousedown", onmousedown);
 
-    const X_OFFSET = 100;   // board is shifted 100 px over from css
-    function getXCoordInQuadrant(maxArray, pos, N) {
-
-        for (let i=0; i<N; i++){
-            let xBound = maxArray[i][0]+X_OFFSET;
-            if (xBound > pos){
-                return xBound;
-            }
-        }
-        return 0;
-    }
-
-    function getYCoordInQuadrant(maxArray, pos, N) {
-
-        let yIndex = 0;
-        for (let i=0; i<N; i++){
-
-            if (maxArray[yIndex][1]>pos){
-                return maxArray[yIndex][1];
-            }
-
-            yIndex += 3;
-        }
-        return 0;
-    }
-
-    function getIndex(x, y, maxArray){
-        let index = -1;
-
-        for (let i=0; i<maxArray.length; i++){
-            for (let j=0; j<maxArray[i].length; j++){
-                let xBound = maxArray[i][0]+X_OFFSET;
-                if (x == xBound && y == maxArray[i][1]){
-                    index = i;
-                    return index;
-                }
-            }
-        }
-
-        return index;
-    }
-
-    const YELLOW = "#f1c40f";
-    function drawCircle(x, y) {
-        context.strokeStyle = YELLOW;
-        context.lineWidth = 8;
-        context.beginPath();
-        context.arc(x-150, y-50, 30, 0, 2*Math.PI);
-        context.stroke();
-    }
-
-    const GREEN = "#16a085";
-    function drawX(x, y) {
-        context.strokeStyle = GREEN;
-        context.lineWidth = 8;
-        context.beginPath();
-        context.moveTo(x-180, y-80);
-        context.lineTo(x-120, y-20);
-        context.closePath();
-        context.stroke();
-
-        context.beginPath();
-        context.moveTo(x-180, y-20);
-        context.lineTo(x-120, y-80);
-        context.closePath();
-        context.stroke();
-    }
-
-    function checkWinner(freeSpaceArr) {
-
-        let total = 0;
-
-        total = checkHorizontal(freeSpaceArr);
-        if (total == X_WIN || total == O_WIN){
-            return total;
-        }
-
-        total = 0;
-        total = checkVertical(freeSpaceArr);
-        if (total == X_WIN || total == O_WIN){
-            return total;
-        }
-
-        total = 0;
-        total = checkDiagonal(freeSpaceArr);
-        if (total == X_WIN || total == O_WIN){
-            return total;
-        }
-
-        return 0;
-    }
-
-    function checkHorizontal(freeSpaceArr){
-        let index = 0;
-        let total = 0;
-
-        for (let i=0; i<freeSpaceArr.length; i++){
-            if (index%N === 0){
-                total = 0;
-            }
-
-            total += freeSpaceArr[index];
-            index++;
-
-            if (total == X_WIN || total == O_WIN){
-                return total;
-            }
-        }
-        return total;
-    }
-
-    function checkVertical(freeSpaceArr){
-        let index = 0;
-        let total = 0;
-
-        for (let i=0; i<freeSpaceArr.length; i++){
-            if (index >= freeSpaceArr.length){
-                index -= 8; // 8 will set index to the start of adj row
-                total = 0;
-            }
-            total += freeSpaceArr[index];
-            index += N;
-
-            if (total == X_WIN || total == O_WIN){
-                return total;
-            }
-        }
-        return total;
-    }
-
-    function checkDiagonal(freeSpaceArr){
-        let index = 0;
-        let total = 0;
-
-        total = freeSpaceArr[index] + freeSpaceArr[index+4] +
-            freeSpaceArr[index+8];
-        if (total == X_WIN || total == O_WIN){
-            return total;
-        }
-
-        index = 2;
-        total = freeSpaceArr[index] + freeSpaceArr[index+2] +
-            freeSpaceArr[index+4];
-        if (total == X_WIN || total == O_WIN){
-            return total;
-        }
-        return total;
-
-    }
 
     singleBtn.onclick = function ( e ){
         clearCanvas(context, canvas);
@@ -393,6 +244,154 @@ function clearCanvas(context, canvas){
 
 }
 
+const X_OFFSET = 100;   // board is shifted 100 px over from css
+function getXCoordInQuadrant(maxArray, pos, N) {
+
+    for (let i=0; i<N; i++){
+        let xBound = maxArray[i][0]+X_OFFSET;
+        if (xBound > pos){
+            return xBound;
+        }
+    }
+    return 0;
+}
+
+function getYCoordInQuadrant(maxArray, pos, N) {
+    let yIndex = 0;
+    for (let i=0; i<N; i++){
+
+        if (maxArray[yIndex][1]>pos){
+            return maxArray[yIndex][1];
+        }
+
+        yIndex += 3;
+    }
+    return 0;
+}
+
+function getIndex(x, y, maxArray){
+    let index = -1;
+
+    for (let i=0; i<maxArray.length; i++){
+        for (let j=0; j<maxArray[i].length; j++){
+            let xBound = maxArray[i][0]+X_OFFSET;
+            if (x == xBound && y == maxArray[i][1]){
+                index = i;
+                return index;
+            }
+        }
+    }
+
+    return index;
+}
+
+const YELLOW = "#f1c40f";
+function drawCircle(x, y, context) {
+    context.strokeStyle = YELLOW;
+    context.lineWidth = 8;
+    context.beginPath();
+    context.arc(x-150, y-50, 30, 0, 2*Math.PI);
+    context.stroke();
+}
+
+const GREEN = "#16a085";
+function drawX(x, y, context) {
+    context.strokeStyle = GREEN;
+    context.lineWidth = 8;
+    context.beginPath();
+    context.moveTo(x-180, y-80);
+    context.lineTo(x-120, y-20);
+    context.closePath();
+    context.stroke();
+
+    context.beginPath();
+    context.moveTo(x-180, y-20);
+    context.lineTo(x-120, y-80);
+    context.closePath();
+    context.stroke();
+}
+
+// Game functions
+
+function checkWinner(freeSpaceArr, X_WIN, O_WIN, N) {
+    let total = 0;
+
+    total = checkHorizontal(freeSpaceArr, X_WIN, O_WIN, N);
+    if (total == X_WIN || total == O_WIN){
+        return total;
+    }
+
+    total = 0;
+    total = checkVertical(freeSpaceArr, X_WIN, O_WIN, N);
+    if (total == X_WIN || total == O_WIN){
+        return total;
+    }
+
+    total = 0;
+    total = checkDiagonal(freeSpaceArr, X_WIN, O_WIN);
+    if (total == X_WIN || total == O_WIN){
+        return total;
+    }
+
+    return 0;
+}
+
+function checkHorizontal(freeSpaceArr, X_WIN, O_WIN, N){
+    let index = 0;
+    let total = 0;
+
+    for (let i=0; i<freeSpaceArr.length; i++){
+        if (index%N === 0){
+            total = 0;
+        }
+
+        total += freeSpaceArr[index];
+        index++;
+
+        if (total == X_WIN || total == O_WIN){
+            return total;
+        }
+    }
+    return total;
+}
+
+function checkVertical(freeSpaceArr, X_WIN, O_WIN, N){
+    let index = 0;
+    let total = 0;
+
+    for (let i=0; i<freeSpaceArr.length; i++){
+        if (index >= freeSpaceArr.length){
+            index -= 8; // 8 will set index to the start of adj row
+            total = 0;
+        }
+        total += freeSpaceArr[index];
+        index += N;
+
+        if (total == X_WIN || total == O_WIN){
+            return total;
+        }
+    }
+    return total;
+}
+
+function checkDiagonal(freeSpaceArr, X_WIN, O_WIN){
+    let index = 0;
+    let total = 0;
+
+    total = freeSpaceArr[index] + freeSpaceArr[index+4] +
+        freeSpaceArr[index+8];
+    if (total == X_WIN || total == O_WIN){
+        return total;
+    }
+
+    index = 2;
+    total = freeSpaceArr[index] + freeSpaceArr[index+2] +
+        freeSpaceArr[index+4];
+    if (total == X_WIN || total == O_WIN){
+        return total;
+    }
+    return total;
+}
 
 //==============================================================
 
