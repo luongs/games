@@ -3,9 +3,15 @@
 /*jslint browser:true */    // ignore document error
 "use strict";
 
-function drawBoard() {
-    const canvas = document.getElementById('canvas');
-    const context = document.getElementById('canvas').getContext('2d');
+function getCanvas() {
+    return document.getElementById('canvas');
+}
+
+function getContext() {
+    return document.getElementById('canvas').getContext('2d');
+}
+
+function drawBoard(canvas, context) {
     const msg = document.getElementById('msg');
     const singleBtn = document.getElementById('single');
     const multiBtn = document.getElementById('multi');
@@ -28,7 +34,7 @@ function drawBoard() {
     socket.on('emitStartSingleplayer', function(data){
         isMultiplayer = data.isMultiplayer;
         clearCanvas();
-        gameArr = createGameArr();
+        gameArr = createGameArr(context, N);
         freeSpaceArr = createFreeSpaceArr(gameArr);
         eraseOuterSquare();
         currentMoveIndex = 0;
@@ -42,7 +48,7 @@ function drawBoard() {
     socket.on('emitStartMultiplayer', function(data){
         isMultiplayer = data;
         clearCanvas();
-        gameArr = createGameArr();
+        gameArr = createGameArr(context, N);
         freeSpaceArr = createFreeSpaceArr(gameArr);
         eraseOuterSquare();
         currentMoveIndex = 0;
@@ -69,30 +75,7 @@ function drawBoard() {
     });
 
 
-    const GREY = "#C0C0C0";
-    function createGameArr(){
-        let index = 0;
-        let gameArr = [];
-
-        for (let i=0; i<N; i++ ){
-            let y = i+1;
-
-            for (let j=0; j<N; j++){
-                let x = j+1;
-
-                let coordArr = [(100*(x+1)), (100*(y+1))];
-                gameArr[index++] = coordArr;
-
-                context.lineWidth = 2;
-                context.strokeStyle = GREY;
-                context.lineCap = "round";
-                context.strokeRect(100*x, 100*y, 100, 100);
-            }
-        }
-        return gameArr;
-    }
-
-    const WHITE = "#FFFFFF";
+        const WHITE = "#FFFFFF";
     function eraseOuterSquare(){
         context.strokeStyle = WHITE;
         context.lineWidth = 4;
@@ -109,7 +92,7 @@ function drawBoard() {
     }
 
     // Setup board
-    let gameArr = createGameArr();
+    let gameArr = createGameArr(context, N);
     let freeSpaceArr = createFreeSpaceArr(gameArr);
     eraseOuterSquare();
 
@@ -359,7 +342,7 @@ function drawBoard() {
 
     singleBtn.onclick = function ( e ){
         clearCanvas();
-        gameArr = createGameArr();
+        gameArr = createGameArr(context, N);
         freeSpaceArr = createFreeSpaceArr(gameArr);
         eraseOuterSquare();
         currentMoveIndex = 0;
@@ -381,3 +364,36 @@ function drawBoard() {
         socket.emit('startMultiplayer', isMultiplayer);
     };
 }
+
+const GREY = "#C0C0C0";
+let createGameArr = function(context, numColumns){
+    let index = 0;
+    let gameArr = [];
+
+    for (let i=0; i<numColumns; i++ ){
+        let y = i+1;
+
+        for (let j=0; j<numColumns; j++){
+            let x = j+1;
+
+            let coordArr = [(100*(x+1)), (100*(y+1))];
+            gameArr[index++] = coordArr;
+
+            context.lineWidth = 2;
+            context.strokeStyle = GREY;
+            context.lineCap = "round";
+            context.strokeRect(100*x, 100*y, 100, 100);
+        }
+    }
+    return gameArr;
+};
+
+
+window.onload = function (e){
+
+    const canvas = getCanvas();
+    const context = getContext();
+    drawBoard(canvas, context);
+
+};
+
